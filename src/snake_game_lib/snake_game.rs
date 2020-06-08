@@ -19,6 +19,7 @@ pub struct SnakeGame {
     gl: GlGraphics, // OpenGL drawing backend.
     snake: Snake,
     apple: Apple,
+    direction_pressed: bool,
 }
 
 impl SnakeGame {
@@ -37,6 +38,7 @@ impl SnakeGame {
                     rng.gen_range(0.0, GRID_Y as f64) as i32,
                 ),
             },
+            direction_pressed: false,
         };
 
         return game;
@@ -72,9 +74,14 @@ impl SnakeGame {
         {
             self.reset_game_state();
         }
+        self.direction_pressed = false;
     }
 
     pub fn pressed(&mut self, btn: &Button) {
+        if self.direction_pressed {
+            return;
+        }
+        self.direction_pressed = true;
         let last_dir = self.snake.direction.clone();
 
         self.snake.direction = match btn {
